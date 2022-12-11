@@ -1,0 +1,81 @@
+#define TRIG_PIN 23
+#define ECHO_PIN 22
+#define MoP1 34 // Pick a pin This is for moister sensor
+#define MoP2 35 // Pick a pin This is for moister sensor
+#define MoP3 36 // Pick a pin This is for moister sensor
+#define MoP4 39 // Pick a pin This is for moister sensor
+#define ReP1 17 // Pick a pin This is for the Relay
+#define ReP2 16 // Pick a pin This is for the Relay
+#define ReP3 27 // Pick a pin This is for the Relay
+#define ReP4 26 // Pick a pin This is for the Relay
+#define THRESHOLD1 1000 // Change value
+#define THRESHOLD2 1000 // Change value
+
+
+float duration_us, distance_cm;
+
+void setup() {
+  Serial.begin (9600);
+  pinMode(TRIG_PIN, OUTPUT);
+  pinMode(ECHO_PIN, INPUT);
+  pinMode(ReP1, OUTPUT);
+  pinMode(ReP2, OUTPUT);
+  pinMode(ReP3, OUTPUT);
+  pinMode(ReP4, OUTPUT);
+
+  
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  int Moi1 = analogRead(MoP1); // read the analog value from moister sensor 1
+  int Moi2 = analogRead(MoP2); // read the analog value from moister sensor 1
+  int Moi3 = analogRead(MoP3); // read the analog value from moister sensor 1
+  int Moi4 = analogRead(MoP4); // read the analog value from moister sensor 1
+
+  if (Moi1 < THRESHOLD1) {
+    Serial.print("The soil is DRY => turn pump ON");
+    digitalWrite(ReP1, HIGH);
+  } else {
+    Serial.print("The soil is WET => turn pump OFF");
+    digitalWrite(ReP1, LOW);
+  }  
+  
+    if (Moi2 < THRESHOLD2) {
+    Serial.print("The soil is DRY => turn pump ON");
+    digitalWrite(ReP2, HIGH);
+  } else {
+    Serial.print("The soil is WET => turn pump OFF");
+    digitalWrite(ReP2, LOW);
+  }
+
+    if (Moi3 < THRESHOLD1) {
+    Serial.print("The soil is DRY => turn pump ON");
+    digitalWrite(ReP3, HIGH);
+  } else {
+    Serial.print("The soil is WET => turn pump OFF");
+    digitalWrite(ReP3, LOW);
+  }
+
+    if (Moi4 < THRESHOLD2) {
+    Serial.print("The soil is DRY => turn pump ON");
+    digitalWrite(ReP4, HIGH);
+  } else {
+    Serial.print("The soil is WET => turn pump OFF");
+    digitalWrite(ReP4, LOW);
+  }
+
+  digitalWrite(TRIG_PIN, HIGH);
+  delayMicroseconds(1000);
+  digitalWrite(TRIG_PIN, LOW);
+
+  // measure duration of pulse from ECHO pin
+  duration_us = pulseIn(ECHO_PIN, HIGH);
+
+  // calculate the distance
+  distance_cm = 0.017 * duration_us;
+
+  // print the value to Serial Monitor
+  
+  delay(500);
+}
